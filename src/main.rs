@@ -10,6 +10,8 @@ fn main() {
         // NOTE: check for built_in command
         if input.eq("ls") {
             path::get_files_in_dir(&path::get_user_current_dir());
+        } else {
+            eprintln!("unknown command");
         }
 
         // NOTE: check for external PATH exe
