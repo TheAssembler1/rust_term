@@ -2,6 +2,7 @@ use std::env;
 use std::fs;
 use std::fs::DirEntry;
 use std::path::Path;
+use std::io::{stdout, Write};
 
 pub const INTERNAL_PATH: &str = "bin";
 pub const USER_PRECOMMAND: &str = "$ ";
@@ -28,7 +29,8 @@ pub fn get_user_current_dir() -> String {
     }
 }
 
-pub fn get_files_in_dir(dir: &str) {
+pub fn get_files_in_dir(dir: &str) -> Vec<DirEntry> {
+    let mut result: Vec<DirEntry> = Vec::new();
     let path = Path::new(dir);
     if let Ok(folder) = fs::read_dir(path) {
         for path in folder {
@@ -37,14 +39,9 @@ pub fn get_files_in_dir(dir: &str) {
                 Err(_) => continue,
             };
 
-            // FIXME: for now putting [FOLDER_NAME]
-
-            if file.file_type().unwrap().is_dir() {
-                print!("[{}] ", file.file_name().to_str().unwrap());
-            } else {
-                print!("{} ", file.file_name().to_str().unwrap());
-            }
+            result.push(file);
         }
     }
-    println!();
+
+    result
 }
