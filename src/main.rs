@@ -47,6 +47,7 @@ fn get_user_input(current_dir: &str) -> String {
         io::stdout().flush().unwrap();
 
         let mut input: String = String::new();
+
         match io::stdin().read_line(&mut input) {
             Ok(res) => res,
             Err(_) => continue,
