@@ -1,21 +1,35 @@
 use std::io::{self, Write};
+use std::process::Command;
 
 mod built_in;
 mod path;
 
 fn main() {
+    let commands_map = path::load_commands();
+
     loop {
+        io::stdout().flush().unwrap();
         let input = get_user_input(&path::get_user_current_dir());
         let args = parse_arguments(input);
+        // NOTE: remove commands to just have args
         let command = args.get(0).unwrap();
 
         match command.as_str() {
-           "ls" => built_in::ls(&path::get_user_current_dir()),
+           //"ls" => built_in::ls(&path::get_user_current_dir()),
            "cd" => built_in::cd(path::get_user_current_dir(), args),
-            _ => eprintln!("uknown command"),
+           command => {
+                if !commands_map.contains_key(command) {
+                    eprintln!("unknown command");
+                } else {
+                    let command_path = commands_map.get(command).unwrap();
+                    Command::new(command_path).args(args.iter().skip(1))
+                        .spawn()
+                        .expect("Failed")
+                        .wait()
+                        .unwrap();
+                }
+           },
         }
-
-        // NOTE: check for external PATH exe
     }
 }
 
