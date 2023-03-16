@@ -25,6 +25,7 @@ pub fn cd(current_dir: String, args: Vec<String>) {
 pub fn ls(current_dir: &str) {
     let entries = path::get_files_in_dir(current_dir);
     for entry in entries {
+       print!("{:?}", entry.metadata().unwrap().permissions().);
        if entry.metadata().unwrap().is_dir() {
            println!("[{}]", entry.file_name().to_str().unwrap());
        } else {

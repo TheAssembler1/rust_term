@@ -15,20 +15,20 @@ fn main() {
         let command = args.get(0).unwrap();
 
         match command.as_str() {
-           //"ls" => built_in::ls(&path::get_user_current_dir()),
+           "ls" => built_in::ls(&path::get_user_current_dir()),
            "cd" => built_in::cd(path::get_user_current_dir(), args),
-           command => {
-                if !commands_map.contains_key(command) {
-                    eprintln!("unknown command");
-                } else {
-                    let command_path = commands_map.get(command).unwrap();
-                    Command::new(command_path).args(args.iter().skip(1))
-                        .spawn()
-                        .expect("Failed")
-                        .wait()
-                        .unwrap();
-                }
-           },
+            command => {
+                 if !commands_map.contains_key(command) {
+                     eprintln!("unknown command");
+                 } else {
+                     let command_path = commands_map.get(command).unwrap();
+                     Command::new(command_path).args(args.iter().skip(1))
+                         .spawn()
+                         .expect("Failed")
+                         .wait()
+                         .unwrap();
+                 }
+            },
         }
     }
 }
